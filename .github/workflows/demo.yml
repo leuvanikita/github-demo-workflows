@@ -5,7 +5,7 @@ name: Demo CICD workflow
 on:
   workflow_dispatch:
 
-# these are jobs inside the workflow
+# these are jobs inside the workflow.
 jobs:
 
   code:
