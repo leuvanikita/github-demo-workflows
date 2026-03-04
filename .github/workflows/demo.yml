@@ -5,7 +5,7 @@ on:
   # Manual click (deliver) workflow whenever user needs
   workflow_dispatch:
 
-# these are jobs inside the workflow
+# these are jobs inside the workflow.
 jobs:
 
   code:
