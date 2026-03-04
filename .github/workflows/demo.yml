@@ -4,6 +4,16 @@ name: Demo CICD workflow
 # Manual click (deliver) workflow whenever user needs
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment value
+        default: 'dev'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
+          - stg
 
 # these are jobs inside the workflow.
 jobs:
