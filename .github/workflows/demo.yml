@@ -1,9 +1,9 @@
 
 name: Demo CICD workflow
 
-# on:
-  # Manual click (deliver) workflow whenever user needs
-  # workflow_dispatch:
+# Manual click (deliver) workflow whenever user needs
+on:
+  workflow_dispatch:
 
 # these are jobs inside the workflow.
 jobs:
