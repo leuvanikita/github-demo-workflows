@@ -10,22 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name:  Checkout code
-        step: echo "Code clone"
+        run: echo "Code clone"
 
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Docker build
-        step: echo "docker build"
+        run: echo "docker build -t app ."
 
   test:
     runs-on: ubuntu-latest
     steps:
       - name: Test code
-        step: echo "Test code"
+        run: echo "Test code"
 
   deploy:     
     runs-on: ubuntu-latest
     steps:
       - name: Deploy code
-        step: echo "docker compose up or down"
+        run: echo "docker compose up or down"
