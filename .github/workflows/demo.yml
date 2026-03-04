@@ -1,5 +1,5 @@
 
-name: Demo CICD Workflow
+name: Demo CICD workflow
 
 on:
   # Manual click (deliver) workflow whenever user needs
