@@ -1,11 +1,11 @@
 name: Demo workflow
 
-# on:
-#   push:
-#     branches: [main]
-
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+
+    paths:
+      - '**.html'      # workflow run if any html file push 
 
 jobs:
 
