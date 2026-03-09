@@ -16,6 +16,7 @@ jobs:
     
         # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
         permissions:
+            contents: read 
             pages: write
             id-token: write
 
@@ -29,8 +30,11 @@ jobs:
 
             - name: Upload static files
               uses: actions/upload-pages-artifact@v4
+              with:
+                  path: "."
 
             - name: Deploy to Github Pages
+              id: deployment
               uses: actions/deploy-pages@v4      
         
         
