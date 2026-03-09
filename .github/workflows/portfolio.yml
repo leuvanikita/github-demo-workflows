@@ -1,5 +1,5 @@
 
-name: Portfolio page
+name: Portfolio
 
 on:
    push:
