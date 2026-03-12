@@ -24,3 +24,6 @@ jobs:
 
             - name: run linter
               run: flake8 app.py          
+
+            - name: Verify flake8 installed
+              run: flake8 --version  
