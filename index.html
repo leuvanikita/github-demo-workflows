@@ -3,626 +3,941 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Niki — DevOps Learner</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>DevOps Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0c10;
-    --surface: #111318;
-    --border: #1e2330;
-    --accent: #00e5ff;
-    --accent2: #7c3aed;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --green: #00ff88;
+    --bg: #050810;
+    --bg2: #080d1a;
+    --panel: #0a1020;
+    --border: #1a2a4a;
+    --accent: #00d4ff;
+    --accent2: #00ff88;
+    --accent3: #ff6b35;
+    --text: #c8d8f0;
+    --muted: #4a6080;
+    --glow: 0 0 20px rgba(0, 212, 255, 0.3);
+    --glow2: 0 0 20px rgba(0, 255, 136, 0.3);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  html { scroll-behavior: smooth; }
+
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Rajdhani', sans-serif;
     overflow-x: hidden;
+    cursor: none;
   }
 
-  /* Grid background */
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s;
+    box-shadow: 0 0 15px var(--accent);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,212,255,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.2s, height 0.2s;
+  }
+
+  /* Scanline overlay */
   body::before {
     content: '';
     position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
     pointer-events: none;
-    z-index: 0;
+    z-index: 1000;
   }
 
-  /* Glow orbs */
-  .orb {
+  /* Grid background */
+  body::after {
+    content: '';
     position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
     pointer-events: none;
     z-index: 0;
   }
-  .orb-1 { width: 600px; height: 600px; background: rgba(0,229,255,0.07); top: -200px; left: -200px; }
-  .orb-2 { width: 500px; height: 500px; background: rgba(124,58,237,0.07); bottom: -150px; right: -150px; }
-
-  main { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 24px; }
 
   /* NAV */
   nav {
+    position: fixed;
+    top: 0; width: 100%;
+    padding: 16px 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 28px 0;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    animation: fadeDown 0.6s ease both;
+    z-index: 100;
   }
 
-  .logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 900;
     color: var(--accent);
-    letter-spacing: -0.5px;
+    letter-spacing: 2px;
+    text-shadow: var(--glow);
   }
-  .logo span { color: var(--muted); font-weight: 400; }
 
-  .nav-links { display: flex; gap: 28px; }
+  .nav-logo span { color: var(--accent2); }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
   .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
     color: var(--muted);
     text-decoration: none;
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    transition: color 0.2s;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
   }
   .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
 
   /* HERO */
   .hero {
-    padding: 80px 0 60px;
-    animation: fadeUp 0.7s 0.1s ease both;
-  }
-
-  .status-badge {
-    display: inline-flex;
+    min-height: 100vh;
+    display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(0,255,136,0.08);
-    border: 1px solid rgba(0,255,136,0.2);
-    border-radius: 100px;
-    padding: 6px 14px;
-    font-size: 0.7rem;
-    color: var(--green);
-    letter-spacing: 0.05em;
-    margin-bottom: 32px;
-  }
-  .status-dot {
-    width: 7px; height: 7px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
+    padding: 120px 48px 80px;
+    position: relative;
+    z-index: 1;
   }
 
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.8rem, 7vw, 5rem);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -2px;
+  .hero-content { max-width: 700px; }
+
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--accent2);
+    letter-spacing: 4px;
+    text-transform: uppercase;
     margin-bottom: 20px;
-  }
-  h1 .line2 { color: var(--accent); }
-
-  .hero-desc {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.8;
-    max-width: 520px;
-    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
   }
 
-  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-tag::before { content: '> '; color: var(--accent); }
+
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.4s forwards;
+  }
+
+  .hero h1 .highlight {
+    color: var(--accent);
+    text-shadow: var(--glow);
+    display: block;
+  }
+
+  .hero-role {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    color: var(--accent3);
+    letter-spacing: 3px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.6s forwards;
+  }
+
+  .hero p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text);
+    max-width: 540px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.8s forwards;
+  }
+
+  .hero-btns {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s 1s forwards;
+  }
 
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    text-decoration: none;
-    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 28px;
     border: none;
-    transition: all 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
   }
+
   .btn-primary {
     background: var(--accent);
-    color: #000;
-    font-weight: 700;
+    color: var(--bg);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
   }
-  .btn-primary:hover { background: #33eaff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,255,0.25); }
-  .btn-ghost {
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 30px rgba(0,212,255,0.6);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
     background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* STATS BAR */
-  .stats-bar {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    margin: 50px 0;
-    overflow: hidden;
-    animation: fadeUp 0.7s 0.2s ease both;
-  }
-  .stat {
-    padding: 24px;
-    border-right: 1px solid var(--border);
-  }
-  .stat:last-child { border-right: none; }
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
     color: var(--accent);
-    line-height: 1;
-    margin-bottom: 6px;
+    border: 1px solid var(--accent);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
   }
-  .stat-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.06em; }
+  .btn-outline:hover {
+    background: rgba(0,212,255,0.1);
+    box-shadow: var(--glow);
+    transform: translateY(-2px);
+  }
 
-  /* SECTION HEADER */
+  /* Terminal widget */
+  .terminal {
+    position: absolute;
+    right: 48px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 380px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,212,255,0.1), 0 20px 60px rgba(0,0,0,0.5);
+    opacity: 0;
+    animation: fadeLeft 0.8s 1.2s forwards;
+  }
+
+  .terminal-bar {
+    background: #0d1626;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+
+  .terminal-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: 8px;
+    letter-spacing: 1px;
+  }
+
+  .terminal-body {
+    padding: 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .t-line { display: flex; gap: 8px; }
+  .t-prompt { color: var(--accent2); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--muted); padding-left: 16px; }
+  .t-out.green { color: var(--accent2); }
+  .t-out.cyan { color: var(--accent); }
+  .t-out.orange { color: var(--accent3); }
+
+  .blink {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent);
+    vertical-align: middle;
+    animation: blink 1s infinite;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 48px;
+    position: relative;
+    z-index: 1;
+  }
+
   .section-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 28px;
+    gap: 16px;
+    margin-bottom: 60px;
   }
-  .section-tag {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
+
+  .section-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
     color: var(--accent);
-    border: 1px solid rgba(0,229,255,0.3);
-    padding: 4px 10px;
-    border-radius: 4px;
-  }
-  .section-line { flex: 1; height: 1px; background: var(--border); }
-
-  /* SKILLS */
-  .skills-section { margin-bottom: 64px; animation: fadeUp 0.7s 0.3s ease both; }
-
-  .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-
-  .skill-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px 20px;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .skill-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-
-  .skill-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .skill-name { font-size: 0.78rem; font-weight: 500; color: var(--text); }
-  .skill-pct { font-size: 0.7rem; color: var(--accent); }
-
-  .skill-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .skill-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 2px;
-    animation: grow 1.2s 0.5s ease both;
-    transform-origin: left;
+    letter-spacing: 2px;
   }
 
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .tag {
-    font-size: 0.6rem;
-    color: var(--muted);
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    padding: 2px 8px;
-    border-radius: 3px;
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
   }
 
-  /* EXPERIENCE */
-  .exp-section { margin-bottom: 64px; animation: fadeUp 0.7s 0.35s ease both; }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
 
-  .exp-item {
+  /* TOOLS */
+  #tools { background: var(--bg2); }
+
+  .tools-grid {
     display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 0 24px;
-    margin-bottom: 0;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 16px;
   }
-  .exp-item + .exp-item { margin-top: 0; }
 
-  .exp-timeline {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 4px;
-  }
-  .exp-dot {
-    width: 10px; height: 10px;
-    border: 2px solid var(--accent);
-    border-radius: 50%;
-    background: var(--bg);
-    flex-shrink: 0;
-  }
-  .exp-line { width: 1px; flex: 1; background: var(--border); min-height: 40px; }
-  .exp-item:last-child .exp-line { display: none; }
-
-  .exp-year { font-size: 0.65rem; color: var(--muted); margin-top: 2px; text-align: right; padding-right: 8px; }
-
-  .exp-body { padding-bottom: 32px; }
-  .exp-role { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 2px; }
-  .exp-company { font-size: 0.72rem; color: var(--accent); margin-bottom: 8px; }
-  .exp-desc { font-size: 0.73rem; color: var(--muted); line-height: 1.75; }
-
-  /* PROJECTS */
-  .projects-section { margin-bottom: 64px; animation: fadeUp 0.7s 0.4s ease both; }
-
-  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-
-  .project-card {
-    background: var(--surface);
+  .tool-card {
+    background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 22px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.3s;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
   }
-  .project-card::before {
+
+  .tool-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    opacity: 0;
-    transition: opacity 0.2s;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s;
   }
-  .project-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-3px); }
-  .project-card:hover::before { opacity: 1; }
 
-  .project-icon { font-size: 1.5rem; margin-bottom: 12px; }
-  .project-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
-  .project-desc { font-size: 0.7rem; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
-  .project-stack { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tool-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: var(--glow);
+  }
+
+  .tool-card:hover::before { transform: scaleX(1); }
+
+  .tool-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+
+  .tool-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+
+  .tool-cat {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+
+  .project-card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
+  }
+
+  .project-card:hover::after { transform: scaleX(1); }
+
+  .project-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(0,212,255,0.06);
+    position: absolute;
+    top: 16px; right: 24px;
+    line-height: 1;
+  }
+
+  .project-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .project-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .project-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
   .stack-tag {
-    font-size: 0.6rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .project-card:hover .stack-tag {
+    border-color: rgba(0,212,255,0.3);
     color: var(--accent);
-    background: rgba(0,229,255,0.07);
-    border: 1px solid rgba(0,229,255,0.15);
-    padding: 2px 8px;
-    border-radius: 3px;
+  }
+
+  .project-links { display: flex; gap: 12px; }
+
+  .proj-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .proj-link:hover { color: var(--accent2); }
+  .proj-link::before { content: '→'; }
+
+  /* STATS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+
+  .stat-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--accent);
+    text-shadow: var(--glow);
+    display: block;
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    display: block;
   }
 
   /* CONTACT */
-  .contact-section {
-    margin-bottom: 80px;
-    background: var(--surface);
+  #contact { background: var(--bg2); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .contact-info p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    color: var(--text);
+    text-decoration: none;
+    padding: 14px 20px;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 40px;
-    text-align: center;
-    animation: fadeUp 0.7s 0.45s ease both;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s;
+    letter-spacing: 1px;
   }
-  .contact-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(0,229,255,0.05), transparent 60%);
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.05);
+    padding-left: 28px;
   }
-  .contact-section h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 10px;
-    position: relative;
+
+  .contact-link .link-icon { font-size: 18px; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+  .form-group label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
   }
-  .contact-section p { font-size: 0.78rem; color: var(--muted); margin-bottom: 28px; position: relative; }
-  .contact-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; position: relative; }
+
+  .form-group input,
+  .form-group textarea {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    resize: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0,212,255,0.1);
+  }
 
   /* FOOTER */
   footer {
     border-top: 1px solid var(--border);
-    padding: 24px 0;
+    padding: 24px 48px;
     display: flex;
     justify-content: space-between;
-    font-size: 0.67rem;
-    color: var(--muted);
-    animation: fadeUp 0.7s 0.5s ease both;
+    align-items: center;
+    position: relative;
+    z-index: 1;
   }
+
+  .footer-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  .footer-text span { color: var(--accent); }
 
   /* ANIMATIONS */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.85); }
-  }
-  @keyframes grow {
-    from { transform: scaleX(0); }
-    to { transform: scaleX(1); }
   }
 
-  /* RESPONSIVE */
-  @media (max-width: 600px) {
-    .skills-grid, .projects-grid { grid-template-columns: 1fr; }
-    .stats-bar { grid-template-columns: 1fr; }
-    .stat { border-right: none; border-bottom: 1px solid var(--border); }
-    .stat:last-child { border-bottom: none; }
-    .exp-item { grid-template-columns: 80px 1fr; }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translate(30px, -50%); }
+    to { opacity: 1; transform: translate(0, -50%); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(0,212,255,0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 1024px) {
+    .terminal { display: none; }
+    .hero { padding-top: 100px; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero { padding: 100px 24px 60px; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; }
   }
 </style>
 </head>
 <body>
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-<main>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DEV<span>OPS</span>.IO</div>
+  <ul class="nav-links">
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-  <!-- NAV -->
-  <nav>
-    <div class="logo">alex.mercer<span>/devops</span></div>
-    <div class="nav-links">
-      <a href="#skills">Skills</a>
-      <a href="#experience">Exp</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="status-badge">
-      <div class="status-dot"></div>
-      AVAILABLE FOR HIRE
-    </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Initializing profile...</div>
     <h1>
-      Building<br>
-      <span class="line2">Scalable</span><br>
-      Infrastructure
+      Alex Kumar
+      <span class="highlight">DevOps Engineer</span>
     </h1>
-    <p class="hero-desc">
-      DevOps engineer with 6+ years shipping resilient pipelines, cloud architecture, and platform tooling. I turn complex deployments into boring, repeatable processes.
+    <div class="hero-role">// LEARNER → BUILDER → AUTOMATOR</div>
+    <p>
+      Passionate about bridging development and operations. I build automated pipelines, containerize applications, and architect cloud infrastructure that scales — one commit at a time.
     </p>
-    <div class="hero-actions">
-      <a href="#contact" class="btn btn-primary">↗ Get in Touch</a>
-      <a href="#projects" class="btn btn-ghost">View Projects</a>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat">
-      <div class="stat-num">6+</div>
-      <div class="stat-label">YEARS EXP</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">40+</div>
-      <div class="stat-label">PROJECTS SHIPPED</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">99.9%</div>
-      <div class="stat-label">UPTIME SLA MET</div>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
     </div>
   </div>
 
-  <!-- SKILLS -->
-  <section id="skills" class="skills-section">
-    <div class="section-header">
-      <div class="section-tag">01 / SKILLS</div>
-      <div class="section-line"></div>
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <span class="terminal-title">alex@devops ~ bash</span>
     </div>
-    <div class="skills-grid">
-      <div class="skill-card">
-        <div class="skill-header">
-          <span class="skill-name">Cloud Infrastructure</span>
-          <span class="skill-pct">95%</span>
-        </div>
-        <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
-        <div class="skill-tags">
-          <span class="tag">AWS</span><span class="tag">GCP</span><span class="tag">Azure</span><span class="tag">Terraform</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-header">
-          <span class="skill-name">Containers & Orchestration</span>
-          <span class="skill-pct">92%</span>
-        </div>
-        <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
-        <div class="skill-tags">
-          <span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">Helm</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-header">
-          <span class="skill-name">CI/CD Pipelines</span>
-          <span class="skill-pct">90%</span>
-        </div>
-        <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
-        <div class="skill-tags">
-          <span class="tag">GitHub Actions</span><span class="tag">Jenkins</span><span class="tag">ArgoCD</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-header">
-          <span class="skill-name">Observability</span>
-          <span class="skill-pct">88%</span>
-        </div>
-        <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
-        <div class="skill-tags">
-          <span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Datadog</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-header">
-          <span class="skill-name">Scripting & Automation</span>
-          <span class="skill-pct">87%</span>
-        </div>
-        <div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div>
-        <div class="skill-tags">
-          <span class="tag">Python</span><span class="tag">Bash</span><span class="tag">Go</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-header">
-          <span class="skill-name">Security & Compliance</span>
-          <span class="skill-pct">82%</span>
-        </div>
-        <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
-        <div class="skill-tags">
-          <span class="tag">Vault</span><span class="tag">SAST</span><span class="tag">SOC2</span>
-        </div>
-      </div>
+    <div class="terminal-body">
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> whoami</span></div>
+      <div class="t-out cyan">alex_kumar // devops-learner</div>
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> cat skills.txt</span></div>
+      <div class="t-out green">► Docker &amp; Kubernetes</div>
+      <div class="t-out green">► CI/CD Pipelines</div>
+      <div class="t-out green">► AWS Cloud Services</div>
+      <div class="t-out green">► Infrastructure as Code</div>
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> kubectl get pods</span></div>
+      <div class="t-out">NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATUS</div>
+      <div class="t-out cyan">portfolio-pod&nbsp;&nbsp;Running ✓</div>
+      <div class="t-out cyan">jenkins-pod&nbsp;&nbsp;&nbsp;Running ✓</div>
+      <div class="t-out cyan">grafana-pod&nbsp;&nbsp;&nbsp;Running ✓</div>
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> <span class="blink"></span></span></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- EXPERIENCE -->
-  <section id="experience" class="exp-section">
-    <div class="section-header">
-      <div class="section-tag">02 / EXPERIENCE</div>
-      <div class="section-line"></div>
-    </div>
+<!-- TOOLS -->
+<section id="tools">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">TECH STACK</h2>
+    <div class="section-line"></div>
+  </div>
 
-    <div class="exp-item">
-      <div style="text-align:right; padding-top: 4px;">
-        <div class="exp-year">2022 – NOW</div>
-        <div class="exp-timeline" style="align-items: flex-end; padding-right: 12px;">
-          <div class="exp-dot" style="margin-right: 0;"></div>
-          <div class="exp-line"></div>
-        </div>
-      </div>
-      <div class="exp-body">
-        <div class="exp-role">Senior DevOps Engineer</div>
-        <div class="exp-company">⬡ Nexus Systems</div>
-        <div class="exp-desc">Led migration of 60+ microservices to EKS, reducing infra costs by 35%. Built GitOps workflows with ArgoCD and enforced zero-downtime deployments across 3 regions.</div>
-      </div>
-    </div>
+  <div class="tools-grid">
+    <!-- Containers -->
+    <div class="tool-card reveal"><span class="tool-icon">🐳</span><div class="tool-name">Docker</div><div class="tool-cat">Container</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">☸️</span><div class="tool-name">Kubernetes</div><div class="tool-cat">Orchestration</div></div>
+    <!-- CI/CD -->
+    <div class="tool-card reveal"><span class="tool-icon">⚙️</span><div class="tool-name">Jenkins</div><div class="tool-cat">CI/CD</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">🔄</span><div class="tool-name">GitHub Actions</div><div class="tool-cat">CI/CD</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">🦊</span><div class="tool-name">GitLab CI</div><div class="tool-cat">CI/CD</div></div>
+    <!-- Cloud -->
+    <div class="tool-card reveal"><span class="tool-icon">☁️</span><div class="tool-name">AWS</div><div class="tool-cat">Cloud</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">🌐</span><div class="tool-name">Terraform</div><div class="tool-cat">IaC</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">📜</span><div class="tool-name">Ansible</div><div class="tool-cat">Automation</div></div>
+    <!-- Monitoring -->
+    <div class="tool-card reveal"><span class="tool-icon">📊</span><div class="tool-name">Grafana</div><div class="tool-cat">Monitoring</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">🔥</span><div class="tool-name">Prometheus</div><div class="tool-cat">Monitoring</div></div>
+    <!-- OS / Scripting -->
+    <div class="tool-card reveal"><span class="tool-icon">🐧</span><div class="tool-name">Linux</div><div class="tool-cat">OS</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">💻</span><div class="tool-name">Bash</div><div class="tool-cat">Scripting</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">🐍</span><div class="tool-name">Python</div><div class="tool-cat">Scripting</div></div>
+    <!-- Version Control -->
+    <div class="tool-card reveal"><span class="tool-icon">🔀</span><div class="tool-name">Git</div><div class="tool-cat">Version Control</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">🗄️</span><div class="tool-name">Nginx</div><div class="tool-cat">Web Server</div></div>
+    <div class="tool-card reveal"><span class="tool-icon">🔐</span><div class="tool-name">Vault</div><div class="tool-cat">Secrets</div></div>
+  </div>
+</section>
 
-    <div class="exp-item">
-      <div style="text-align:right; padding-top: 4px;">
-        <div class="exp-year">2020 – 2022</div>
-        <div class="exp-timeline" style="align-items: flex-end; padding-right: 12px;">
-          <div class="exp-dot"></div>
-          <div class="exp-line"></div>
-        </div>
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">PROJECTS</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- Project 1 -->
+    <div class="project-card reveal">
+      <div class="project-num">01</div>
+      <div class="project-tag">// CI/CD Pipeline</div>
+      <h3 class="project-title">Automated Deployment Pipeline</h3>
+      <p class="project-desc">
+        Built a full end-to-end CI/CD pipeline for a Node.js microservice. Code pushed to GitHub triggers Jenkins to build, test, containerize with Docker, push to ECR, and deploy to a Kubernetes cluster on AWS EKS — zero manual steps.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">Jenkins</span>
+        <span class="stack-tag">Docker</span>
+        <span class="stack-tag">Kubernetes</span>
+        <span class="stack-tag">AWS EKS</span>
+        <span class="stack-tag">ECR</span>
+        <span class="stack-tag">SonarQube</span>
       </div>
-      <div class="exp-body">
-        <div class="exp-role">Platform Engineer</div>
-        <div class="exp-company">⬡ CloudBridge Inc.</div>
-        <div class="exp-desc">Designed internal developer platform with self-service provisioning. Built Terraform modules used across 12 product teams and standardized observability stack.</div>
+      <div class="project-links">
+        <a href="#" class="proj-link">GitHub</a>
+        <a href="#" class="proj-link">Live Demo</a>
       </div>
     </div>
 
-    <div class="exp-item">
-      <div style="text-align:right; padding-top: 4px;">
-        <div class="exp-year">2018 – 2020</div>
-        <div class="exp-timeline" style="align-items: flex-end; padding-right: 12px;">
-          <div class="exp-dot"></div>
-          <div class="exp-line"></div>
-        </div>
+    <!-- Project 2 -->
+    <div class="project-card reveal">
+      <div class="project-num">02</div>
+      <div class="project-tag">// Infrastructure as Code</div>
+      <h3 class="project-title">AWS Infrastructure with Terraform</h3>
+      <p class="project-desc">
+        Provisioned a production-ready AWS environment using Terraform — VPC, subnets, EC2 auto-scaling groups, RDS, ALB, and S3 buckets. State managed remotely in S3 with DynamoDB locking. Modules reused across dev/staging/prod.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">Terraform</span>
+        <span class="stack-tag">AWS VPC</span>
+        <span class="stack-tag">EC2</span>
+        <span class="stack-tag">RDS</span>
+        <span class="stack-tag">S3</span>
+        <span class="stack-tag">ALB</span>
       </div>
-      <div class="exp-body">
-        <div class="exp-role">DevOps Engineer</div>
-        <div class="exp-company">⬡ DataFlow Labs</div>
-        <div class="exp-desc">Established CI/CD pipelines from scratch using Jenkins and Docker. Automated provisioning of dev/staging environments cutting deployment time from hours to minutes.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects" class="projects-section">
-    <div class="section-header">
-      <div class="section-tag">03 / PROJECTS</div>
-      <div class="section-line"></div>
-    </div>
-    <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-icon">🚀</div>
-        <div class="project-name">K8s Multi-Region Failover</div>
-        <div class="project-desc">Automated failover system across 3 AWS regions with sub-60s RTO using Route53, health checks, and custom controllers.</div>
-        <div class="project-stack">
-          <span class="stack-tag">Kubernetes</span>
-          <span class="stack-tag">AWS</span>
-          <span class="stack-tag">Go</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="project-icon">🔁</div>
-        <div class="project-name">GitOps Pipeline Framework</div>
-        <div class="project-desc">Reusable GitHub Actions + ArgoCD templates adopted by 8 teams. Includes canary deployments, automated rollbacks, and Slack alerts.</div>
-        <div class="project-stack">
-          <span class="stack-tag">ArgoCD</span>
-          <span class="stack-tag">GitHub Actions</span>
-          <span class="stack-tag">Helm</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="project-icon">📊</div>
-        <div class="project-name">Observability Platform</div>
-        <div class="project-desc">Centralized metrics, logs, and tracing stack deployed via Helm. Reduced MTTR by 60% through unified dashboards and smart alerting.</div>
-        <div class="project-stack">
-          <span class="stack-tag">Prometheus</span>
-          <span class="stack-tag">Grafana</span>
-          <span class="stack-tag">Loki</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="project-icon">🔒</div>
-        <div class="project-name">Secrets Management System</div>
-        <div class="project-desc">Vault-based dynamic secrets with short-lived credentials for 200+ services. Achieved SOC2 Type II compliance ahead of schedule.</div>
-        <div class="project-stack">
-          <span class="stack-tag">Vault</span>
-          <span class="stack-tag">Terraform</span>
-          <span class="stack-tag">Python</span>
-        </div>
+      <div class="project-links">
+        <a href="#" class="proj-link">GitHub</a>
+        <a href="#" class="proj-link">Architecture</a>
       </div>
     </div>
-  </section>
 
-  <!-- CONTACT -->
-  <section id="contact" class="contact-section">
-    <h2>Let's Build Together</h2>
-    <p>Open to senior roles, contracts, and interesting infrastructure challenges.</p>
-    <div class="contact-links">
-      <a href="mailto:alex@mercer.dev" class="btn btn-primary">✉ alex@mercer.dev</a>
-      <a href="#" class="btn btn-ghost">⌥ GitHub</a>
-      <a href="#" class="btn btn-ghost">in LinkedIn</a>
-      <a href="#" class="btn btn-ghost">↓ Resume</a>
+    <!-- Project 3 -->
+    <div class="project-card reveal">
+      <div class="project-num">03</div>
+      <div class="project-tag">// Monitoring Stack</div>
+      <h3 class="project-title">Kubernetes Monitoring Dashboard</h3>
+      <p class="project-desc">
+        Deployed a full observability stack on a K8s cluster using Prometheus for metrics scraping, Alertmanager for Slack notifications on pod failures, and Grafana dashboards for real-time CPU, memory, and network visualization.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">Prometheus</span>
+        <span class="stack-tag">Grafana</span>
+        <span class="stack-tag">Alertmanager</span>
+        <span class="stack-tag">Kubernetes</span>
+        <span class="stack-tag">Helm</span>
+        <span class="stack-tag">Slack API</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="proj-link">GitHub</a>
+        <a href="#" class="proj-link">Dashboard</a>
+      </div>
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <span>© 2026 Alex Mercer</span>
-    <span>Built with HTML · No frameworks</span>
-  </footer>
+  </div>
 
-</main>
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box reveal"><span class="stat-num">3+</span><span class="stat-label">Projects Shipped</span></div>
+    <div class="stat-box reveal"><span class="stat-num">16+</span><span class="stat-label">Tools Learned</span></div>
+    <div class="stat-box reveal"><span class="stat-num">100%</span><span class="stat-label">Automated Deploys</span></div>
+    <div class="stat-box reveal"><span class="stat-num">0</span><span class="stat-label">Manual Steps</span></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">CONTACT</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <p>Open to DevOps internships, junior roles, and collaborative projects. Let's build reliable systems together.</p>
+      <div class="contact-links">
+        <a href="https://github.com" class="contact-link"><span class="link-icon">⚡</span> github.com/alexkumar</a>
+        <a href="https://linkedin.com" class="contact-link"><span class="link-icon">🔗</span> linkedin.com/in/alexkumar</a>
+        <a href="mailto:alex@email.com" class="contact-link"><span class="link-icon">📧</span> alex@email.com</a>
+      </div>
+    </div>
+
+    <div class="contact-form reveal">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="John Doe">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="john@company.com">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="5" placeholder="Your message..."></textarea>
+      </div>
+      <button class="btn btn-primary" style="width:fit-content">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-text">© 2026 <span>Alex Kumar</span> — Built with passion for DevOps</div>
+  <div class="footer-text"><span>STATUS:</span> OPEN TO OPPORTUNITIES</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .tool-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '52px';
+      ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
