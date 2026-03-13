@@ -1,0 +1,30 @@
+name: Docker Build and Push
+
+on:
+    workflow_call:
+
+env:
+    IMAGE_TAG: latest
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Code Checkout
+              uses: actions/checkout@v4
+
+            - name: Docker Login
+              uses: actions/login-action@v3
+              with:
+                  username: ${{ vars.DOCKERHUB_USER }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Build and Push to Docker
+              uses: docker/build-push-action@v6
+              with:
+                  context: .            # Dockerfile
+                  push: true
+                  tags: |
+                      ${{ vars.DOCKERHUB_USER }}/${{ vars.GITHUB_REPO }}:${{ github.GITHUB_HEAD_REF }}
+                      ${{ vars.DOCKERHUB_USER }}/${{ github.repository }}:${{ env.IMAGE_TAG }}
+                      ${{ vars.DOCKERHUB_USER }}/${{ github.repository }}:${{ github.GITHUB_SHA }}
