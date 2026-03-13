@@ -22,7 +22,7 @@ jobs:
             - name: Build and Push to Docker
               uses: docker/build-push-action@v6
               with:
-                  context: .            # Dockerfile
+                  context: .            # Dockerfile.
                   push: true
                   tags: |
                       ${{ vars.DOCKERHUB_USER }}/${{ vars.GITHUB_REPO }}:${{ github.GITHUB_HEAD_REF }}
