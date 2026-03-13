@@ -29,6 +29,6 @@ jobs:
                   context: . # Dockerfile.
                   push: true
                   tags: |
-                      ${{ vars.DOCKERHUB_USER }}/${{ env.REPO_NAME }}:${{ github.ref }}
+                      ${{ vars.DOCKERHUB_USER }}/${{ env.REPO_NAME }}:${{ env.IMAGE_TAG }}
                       ${{ vars.DOCKERHUB_USER }}/${{ env.REPO_NAME }}:${{ env.IMAGE_TAG }}
                       ${{ vars.DOCKERHUB_USER }}/${{ env.REPO_NAME }}:${{ github.sha }}
