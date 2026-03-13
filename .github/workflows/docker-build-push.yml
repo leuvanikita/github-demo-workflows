@@ -1,9 +1,9 @@
 name: Docker Build and Push
 
 on:
-    workflow_call:
-    # push:
-    #     branches: [main]
+    # workflow_call:
+    push:
+        branches: [main]
 
 env:
     IMAGE_TAG: latest
