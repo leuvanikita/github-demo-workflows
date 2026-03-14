@@ -1,0 +1,8 @@
+services:
+
+  app:
+    
+    image: ${{ DOCKERHUB_USER }}/github-demo-workflows:latest
+    conatainer_name: pythonapp
+    ports:
+      - "80:80"
