@@ -2,6 +2,6 @@ services:
 
   app:
     
-    image: $${DOCKERHUB_USER}/github-demo-workflows:latest
+    image: ${DOCKERHUB_USER}/github-demo-workflows:latest
     ports:
       - "80:80"
