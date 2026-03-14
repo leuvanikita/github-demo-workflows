@@ -2,9 +2,12 @@ name: Deploy flask app
 
 on:
     workflow_dispatch:
-        
+
 jobs:
     deploy:
+        env:
+            DOCKERHUB_USER: ${{ vars.DOCKERHUB_USER }}
+            
         runs-on: self-hosted
 
     steps:
