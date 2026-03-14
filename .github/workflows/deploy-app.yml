@@ -2,7 +2,7 @@ name: Deploy flask app
 
 on:
     workflow_run:              # Auto trigger workflow by using workflows_run
-        workflows: ["Docker Build and Push"]   # Name of docker-build-push.yml workflow
+        workflows: ["Docker Build and Push"]   # Name of upstream  workflow (docker-build-push.yml)
         types: [completed]
         branches:
             - main
